@@ -1,5 +1,6 @@
 #!/usr/bin/env node
 /// <reference types="zx" />
+import { isNumber } from 'lodash-es';
 import { $, argv, echo, question } from 'zx';
 import { retry } from 'zx/experimental'
 (async () => {
@@ -13,14 +14,22 @@ import { retry } from 'zx/experimental'
     `)
         return
     }
-    let tries = argv.tries || argv.t || 10;
-    let sleep = argv.sleep || argv.s || 10;
+    let tries = argv.tries || argv.t;
+    let sleep = argv.sleep || argv.s;
     let cmd = argv._[1];
 
     if (!cmd) {
         cmd = await question('输入你需要执行重试的命令: ');
-        tries = await question('重试次数: ') || 10;
-        sleep = await question('等待时间(默认单位ms): ') || 10;
+        tries = await question('重试次数: ', { choices: '10' });
+        sleep = await question('等待时间(默认单位ms): ', { choices: '10ms' });
     }
-    await retry(tries, sleep, () => $`${cmd?.split(/\s+/)}`);
+    await retry(formatTries(tries), formatSleep(sleep), () => $`${cmd?.split(/\s+/)}`);
 })().catch(echo);
+
+const formatSleep = (t) => {
+    return isNumber(t) || /^\d.*m?s$/.test(String(t)) ? t : 10
+}
+
+const formatTries = (t) => {
+    return Number(t) > 0 ? t : 10
+}

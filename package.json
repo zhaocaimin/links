@@ -12,7 +12,7 @@
   "license": "MIT",
   "dependencies": {
     "glob": "^8.0.3",
-    "lodash": "^4.17.21",
+    "lodash-es": "^4.17.21",
     "zx": "^7.0.7"
   }
 }
