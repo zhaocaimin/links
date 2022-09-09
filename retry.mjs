@@ -15,9 +15,9 @@ const formatTries = (t) => {
 (async () => {
     if (argv.help) {
         echo(`
-    -h  --help  帮助
-    -t  --tries=10 设置最大重试次数: 默认10
-    -s  --sleep    默认单位毫秒秒 支持 10 , 10ms , 10s
+    -h  --help      帮助
+    -t  --tries=10  设置最大重试次数: 默认10
+    -s  --sleep     默认单位毫秒 支持 10 , 10ms , 10s
     案例：
     retry -t=5 -s=300ms "curl https://github.com" # 请求GitHub最大重试五次 每次失败等待300ms
     `)
@@ -26,7 +26,6 @@ const formatTries = (t) => {
     let tries = argv.tries || argv.t;
     let sleep = argv.sleep || argv.s;
     let cmd = argv._[0];
-    console.log(argv)
     if (!cmd) {
         cmd = await question('输入你需要执行重试的命令: ');
         tries = await question('重试次数: ', { choices: '10' });
